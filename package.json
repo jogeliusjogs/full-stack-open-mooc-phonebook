@@ -1,0 +1,28 @@
+{
+  "name": "osa3",
+  "version": "1.0.0",
+  "description": "full-stack-open-mooc osatehtava",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jogeliusjogs/full-stack-open-mooc.git"
+  },
+  "author": "Jokke Ryynänen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jogeliusjogs/full-stack-open-mooc/issues"
+  },
+  "homepage": "https://github.com/jogeliusjogs/full-stack-open-mooc#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
