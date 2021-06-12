@@ -4,6 +4,7 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
+require('mongoose-unique-validator')
 
 app.use(cors())
 app.use(express.json())
@@ -53,17 +54,6 @@ app.put('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
-  var error = null
-  if (!body.name) {
-    error = 'name is missing'
-  } else if (!body.number) {
-    error = 'number is missing'
-  }
-
-  if (error != null) {
-    next(error)
-  }
-
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -89,6 +79,8 @@ const errorHandler = (error, request, response, next) => {
   
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
     }
   
     next(error)
