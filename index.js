@@ -11,10 +11,11 @@ app.use(express.static('build'))
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :response-time ms :body'));
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
   Person.find({}).then(persons => {
     res.json(persons)
   })
+  .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -36,15 +37,15 @@ app.delete('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  const body = request.body
+  const body = req.body
 
   const updatedPerson = {
     name: body.name,
     number: body.number,
   }
 
-  Person.findByIdAndUpdate(req.params.id, updatedPerson).then(result => {
-    res.status(204).end()
+  Person.findByIdAndUpdate(req.params.id, updatedPerson, { new: true }).then(result => {
+    res.json(updatedPerson)
   })
   .catch(error => next(error))
 })
@@ -57,8 +58,6 @@ app.post('/api/persons', (req, res, next) => {
     error = 'name is missing'
   } else if (!body.number) {
     error = 'number is missing'
-  } else if (phone_records.findIndex(rec => rec.name === body.name) >= 0) {
-    error = 'name has already been added'
   }
 
   if (error != null) {
@@ -74,13 +73,15 @@ app.post('/api/persons', (req, res, next) => {
     console.log('person saved!')
     res.json(person)
   })
+  .catch(error => next(error))
   
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   Person.find({}).then(persons => {
     res.send('Phonebook has info for ' + persons.length + ' people' + '<br/><br/>' + new Date())
   })
+  .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
