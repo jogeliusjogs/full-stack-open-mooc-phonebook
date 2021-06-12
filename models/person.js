@@ -1,11 +1,10 @@
 const mongoose = require('mongoose')
 
-const password = process.argv[2]
 const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -26,7 +25,7 @@ const personSchema = new mongoose.Schema({
   }
 })
 
-const Person = mongoose.model('Person', personSchema)
+mongoose.model('Person', personSchema)
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
