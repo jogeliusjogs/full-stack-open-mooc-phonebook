@@ -12,6 +12,10 @@ app.use(express.static('build'))
 morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :response-time ms :body'))
 
+app.get('/version', (req, res) => {
+  res.send('1')
+})
+
 app.get('/api/persons', (req, res, next) => {
   Person.find({})
     .then(persons => {
